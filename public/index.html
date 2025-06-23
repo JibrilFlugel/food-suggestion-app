@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Đề Xuất Món Ăn</title>
+  </head>
+  <body>
+    <h2>Đề Xuất Món Ăn</h2>
+    <input id="ingredients" placeholder="Nhập nguyên liệu (vd: trung, hanh)" />
+    <button onclick="getSuggestions()">Đề Xuất</button>
+    <div id="results"></div>
+
+    <script>
+      async function getSuggestions() {
+        const ingredients = document
+          .getElementById("ingredients")
+          .value.split(",")
+          .map((i) => i.trim());
+
+        const res = await fetch("/suggest", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ingredients }),
+        });
+
+        const data = await res.json();
+        document.getElementById("results").innerHTML =
+          data.suggestions.length > 0
+            ? data.suggestions.join("<br>")
+            : "Không tìm thấy món nào phù hợp.";
+      }
+    </script>
+  </body>
+</html>
